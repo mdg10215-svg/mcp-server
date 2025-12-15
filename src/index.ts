@@ -1,13 +1,30 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { z } from 'zod'
 import { InferenceClient } from '@huggingface/inference'
 
-// Create server instance
-const server = new McpServer({
-    name: 'test-mcp-server',
-    version: '1.0.0'
+// ==================== Smithery 설정 스키마 ====================
+// 사용자가 서버에 연결할 때 제공해야 하는 설정을 정의합니다
+export const configSchema = z.object({
+    hfToken: z
+        .string()
+        .optional()
+        .describe('Hugging Face API 토큰 (이미지 생성 기능에 필요)')
 })
+
+// 설정 타입 추출
+type Config = z.infer<typeof configSchema>
+
+// ==================== Smithery createServer 함수 ====================
+// Smithery 배포를 위한 기본 export 함수
+export default function createServer({ config }: { config: Config }) {
+    // Create server instance
+    const server = new McpServer({
+        name: 'test-mcp-server',
+        version: '1.0.0'
+    })
+
+    // 설정에서 HF 토큰 가져오기 (환경 변수 폴백)
+    const hfToken = config?.hfToken || process.env.HF_TOKEN
 
 server.registerTool(
     'greet',
@@ -581,11 +598,8 @@ server.registerTool(
             }
 
             // Hugging Face 토큰 확인 및 사용
-            // 주의: 프로덕션 환경에서는 반드시 환경 변수로 관리해야 합니다
-            const hfToken = process.env.HF_TOKEN
-            
             if (!hfToken) {
-                throw new Error('HF_TOKEN 환경 변수가 설정되지 않았습니다.')
+                throw new Error('HF_TOKEN 환경 변수 또는 config.hfToken이 설정되지 않았습니다.')
             }
 
             // Hugging Face Inference Client 초기화 (요청 시마다 생성)
@@ -645,11 +659,11 @@ server.registerTool(
     }
 )
 
-// 서버 시작 시간 기록
-const serverStartTime = new Date()
-const serverName = 'test-mcp-server'
+    // 서버 시작 시간 기록
+    const serverStartTime = new Date()
+    const serverName = 'test-mcp-server'
 
-server.registerResource(
+    server.registerResource(
     'server-info',
     'mcp://server-info',
     {
@@ -829,9 +843,7 @@ server.registerPrompt(
     }
 )
 
-server
-    .connect(new StdioServerTransport())
-    .catch(console.error)
-    .then(() => {
-        console.log('MCP server started')
-    })
+    // Smithery 배포를 위해 MCP 서버 객체 반환
+    // 참고: McpServer 인스턴스가 아닌 내부 Server 객체를 반환해야 함
+    return server.server
+}

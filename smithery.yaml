@@ -1,0 +1,5 @@
+# Smithery 배포 설정
+# 문서: https://smithery.ai/docs/build/deployments/typescript
+
+runtime: "typescript"
+
