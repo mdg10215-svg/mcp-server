@@ -1,8 +1,11 @@
 {
     "mcpServers": {
-        "YOUR_SERVER_NAME": {
+        "test-mcp-server": {
             "command": "node",
-            "args": ["/ABSOLUTE/PATH/TO/YOUR/PROJECT/build/index.js"]
+            "args": ["C:\\Users\\student\\Downloads\\typescript-mcp-server-boilerplate\\build\\index.js"]
+        },
+        "env": {
+            "HF_TOKEN": "YOUR_HF_TOKEN_HERE"
         }
     }
 }
