@@ -16,7 +16,7 @@ type Config = z.infer<typeof configSchema>
 
 // ==================== Smithery createServer 함수 ====================
 // Smithery 배포를 위한 기본 export 함수
-export default function createServer({ config }: { config: Config }) {
+export default function createServer({ config }: { config?: Config } = {}) {
     // Create server instance
     const server = new McpServer({
         name: 'test-mcp-server',
@@ -844,6 +844,6 @@ const codeReviewPromptTemplate = `다음 코드를 리뷰해주세요. 다음 �
 )
 
     // Smithery 배포를 위해 MCP 서버 객체 반환
-    // 참고: McpServer 인스턴스가 아닌 내부 Server 객체를 반환해야 함
+    // Smithery는 McpServer 인스턴스의 server 속성을 사용합니다
     return server.server
 }
