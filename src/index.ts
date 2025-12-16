@@ -17,11 +17,11 @@ type Config = z.infer<typeof configSchema>
 // ==================== Smithery createServer 함수 ====================
 // Smithery 배포를 위한 기본 export 함수
 export default function createServer({ config }: { config: Config }) {
-    // Create server instance
-    const server = new McpServer({
-        name: 'test-mcp-server',
-        version: '1.0.0'
-    })
+// Create server instance
+const server = new McpServer({
+    name: 'test-mcp-server',
+    version: '1.0.0'
+})
 
     // 설정에서 HF 토큰 가져오기 (환경 변수 폴백)
     const hfToken = config?.hfToken || process.env.HF_TOKEN
@@ -659,11 +659,11 @@ server.registerTool(
     }
 )
 
-    // 서버 시작 시간 기록
-    const serverStartTime = new Date()
-    const serverName = 'test-mcp-server'
+// 서버 시작 시간 기록
+const serverStartTime = new Date()
+const serverName = 'test-mcp-server'
 
-    server.registerResource(
+server.registerResource(
     'server-info',
     'mcp://server-info',
     {
