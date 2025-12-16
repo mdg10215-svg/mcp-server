@@ -17,18 +17,18 @@ type Config = z.infer<typeof configSchema>
 // ==================== Smithery createServer 함수 ====================
 // Smithery 배포를 위한 기본 export 함수
 export default function createServer({ config }: { config: Config }) {
-// Create server instance
-const server = new McpServer({
-    name: 'test-mcp-server',
-    version: '1.0.0'
-})
+    // Create server instance
+    const server = new McpServer({
+        name: 'test-mcp-server',
+        version: '1.0.0'
+    })
 
     // 설정에서 HF 토큰 가져오기 (환경 변수 폴백)
     const hfToken = config?.hfToken || process.env.HF_TOKEN
 
-server.registerTool(
-    'greet',
-    {
+    server.registerTool(
+        'greet',
+        {
         description: '이름과 언어를 입력하면 인사말을 반환합니다.',
         inputSchema: z.object({
             name: z.string().describe('인사할 사람의 이름'),
@@ -78,9 +78,9 @@ server.registerTool(
     }
 )
 
-server.registerTool(
-    'calculator',
-    {
+    server.registerTool(
+        'calculator',
+        {
         description: '2개의 숫자와 연산자를 입력받아 계산 결과를 반환합니다.',
         inputSchema: z.object({
             num1: z.number().describe('첫 번째 숫자'),
@@ -212,9 +212,9 @@ function formatUptime(seconds: number): string {
 
 // ==================== MCP 도구 등록 ====================
 
-server.registerTool(
-    'primeNumbers',
-    {
+    server.registerTool(
+        'primeNumbers',
+        {
         description: '특정 범위의 시작값과 마지막 값을 입력받아 해당 구간에 존재하는 모든 소수를 반환합니다.',
         inputSchema: z.object({
             start: z.number().int().describe('범위의 시작값'),
@@ -268,9 +268,9 @@ server.registerTool(
     }
 )
 
-server.registerTool(
-    'currentTime',
-    {
+    server.registerTool(
+        'currentTime',
+        {
         description: '현재 시간을 반환합니다. timezone을 입력하면 해당 timezone 시간을 반환하고, 입력하지 않으면 대한민국 시간을 반환합니다.',
         inputSchema: z.object({
             timezone: z
@@ -339,9 +339,9 @@ server.registerTool(
     }
 )
 
-server.registerTool(
-    'geocode',
-    {
+    server.registerTool(
+        'geocode',
+        {
         description: '도시 이름이나 주소를 입력받아서 위도와 경도 좌표를 반환합니다. Nominatim OpenStreetMap API를 사용합니다.',
         inputSchema: z.object({
             address: z.string().describe('도시 이름이나 주소 (예: "Seoul", "Paris, France", "1600 Amphitheatre Parkway, Mountain View, CA")')
@@ -438,9 +438,9 @@ server.registerTool(
     }
 )
 
-server.registerTool(
-    'get-weather',
-    {
+    server.registerTool(
+        'get-weather',
+        {
         description: '위도와 경도 좌표, 예보 기간을 입력받아서 해당 위치의 현재 날씨와 예보 정보를 제공합니다. Open-Meteo Weather API를 사용합니다.',
         inputSchema: z.object({
             latitude: z.number().describe('위도 좌표'),
@@ -570,9 +570,9 @@ server.registerTool(
     }
 )
 
-server.registerTool(
-    'generate-image',
-    {
+    server.registerTool(
+        'generate-image',
+        {
         description: '텍스트 프롬프트를 입력받아서 AI 이미지를 생성합니다. Hugging Face Inference API를 사용합니다.',
         inputSchema: z.object({
             prompt: z.string().describe('이미지를 생성할 텍스트 프롬프트')
@@ -659,14 +659,14 @@ server.registerTool(
     }
 )
 
-// 서버 시작 시간 기록
-const serverStartTime = new Date()
-const serverName = 'test-mcp-server'
+    // 서버 시작 시간 기록
+    const serverStartTime = new Date()
+    const serverName = 'test-mcp-server'
 
-server.registerResource(
-    'server-info',
-    'mcp://server-info',
-    {
+    server.registerResource(
+        'server-info',
+        'mcp://server-info',
+        {
         description: '현재 서버 정보와 사용 가능한 도구 목록을 반환합니다.',
         mimeType: 'application/json'
     },
@@ -808,9 +808,9 @@ const codeReviewPromptTemplate = `다음 코드를 리뷰해주세요. 다음 �
 
 위 체크리스트를 기반으로 상세한 코드 리뷰를 작성해주세요. 개선 사항이 있다면 구체적인 예시와 함께 제안해주세요.`
 
-server.registerPrompt(
-    'code-review',
-    {
+    server.registerPrompt(
+        'code-review',
+        {
         description: '코드를 입력받아서 코드 리뷰를 위한 프롬프트를 생성합니다.',
         argsSchema: {
             code: z.string().describe('리뷰할 코드'),
